@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Whack-a-Mole</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f8ff;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      color: #00796b;
+    }
+
+    #game-board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-gap: 20px;
+      justify-content: center;
+      margin: 30px auto;
+    }
+
+    .hole {
+      width: 100px;
+      height: 100px;
+      background-color: #6d4c41;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .mole {
+      width: 100%;
+      height: 100%;
+      background-color: #deb887;
+      display: none;
+      border-radius: 50%;
+      background-image: url('https://cdn-icons-png.flaticon.com/512/616/616408.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+    #score, #timer {
+      font-size: 20px;
+      margin: 10px;
+      color: #004d40;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
+      background-color: #009688;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00796b;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 Whack-a-Mole</h1>
+  <div id="score">Score: 0</div>
+  <div id="timer">Time Left: 30</div>
+
+  <div id="game-board">
+    <div class="hole"><div class="mole" onclick="whack(this)"></div></div>
+    <div class="hole"><div class="mole" onclick="whack(this)"></div></div>
+    <div class="hole"><div class="mole" onclick="whack(this)"></div></div>
+    <div class="hole"><div class="mole" onclick="whack(this)"></div></div>
+    <div class="hole"><div class="mole" onclick="whack(this)"></div></div>
+    <div class="hole"><div class="mole" onclick="whack(this)"></div></div>
+    <div class="hole"><div class="mole" onclick="whack(this)"></div></div>
+    <div class="hole"><div class="mole" onclick="whack(this)"></div></div>
+    <div class="hole"><div class="mole" onclick="whack(this)"></div></div>
+  </div>
+
+  <button onclick="startGame()">Start Game</button>
+
+  <script>
+    let score = 0;
+    let timeLeft = 30;
+    let timerInterval;
+    let moleInterval;
+
+    function startGame() {
+      score = 0;
+      timeLeft = 30;
+      document.getElementById("score").textContent = "Score: 0";
+      document.getElementById("timer").textContent = "Time Left: 30";
+
+      clearInterval(timerInterval);
+      clearInterval(moleInterval);
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").textContent = "Time Left: " + timeLeft;
+        if (timeLeft === 0) {
+          clearInterval(timerInterval);
+          clearInterval(moleInterval);
+          hideAllMoles();
+          alert("Game Over! Your score: " + score);
+        }
+      }, 1000);
+
+      moleInterval = setInterval(showRandomMole, 800);
+    }
+
+    function showRandomMole() {
+      hideAllMoles();
+      const moles = document.querySelectorAll(".mole");
+      const randomIndex = Math.floor(Math.random() * moles.length);
+      moles[randomIndex].style.display = "block";
+    }
+
+    function hideAllMoles() {
+      const moles = document.querySelectorAll(".mole");
+      moles.forEach(mole => mole.style.display = "none");
+    }
+
+    function whack(mole) {
+      if (mole.style.display === "block") {
+        score++;
+        document.getElementById("score").textContent = "Score: " + score;
+        mole.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
